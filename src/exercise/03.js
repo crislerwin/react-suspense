@@ -44,7 +44,7 @@ function App() {
       setPokemonResource(null)
       return
     }
-    // 🐨 wrap this next line in a startTransition call
+
     startTransition(() => {
       setPokemonResource(createPokemonResource(pokemonName))
     })
@@ -62,12 +62,7 @@ function App() {
     <div className="pokemon-info-app">
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
-      <div
-        style={{
-          opacity: isPending ? 0.6 : 1,
-        }}
-        className="pokemon-info"
-      >
+      <div className={`pokemon-info ${isPending ? 'pokemon-loading' : ''}`}>
         {pokemonResource ? (
           <PokemonErrorBoundary
             onReset={handleReset}
