@@ -1,5 +1,5 @@
 // Suspense Image
-// http://localhost:3000/isolated/exercise/05.js
+// http://localhost:3000/isolated/final/05.js
 
 import * as React from 'react'
 import {
@@ -11,21 +11,15 @@ import {
 } from '../pokemon'
 import {createResource} from '../utils'
 
-// ❗❗❗❗
-// 🦉 On this one, make sure that you UNCHECK the "Disable cache" checkbox
-// in your DevTools "Network Tab". We're relying on that cache for this
-// approach to work!
-// ❗❗❗❗
-
-const imgSrcResourceCache = {}
-
-const preloadImage = src => {
+function preloadImage(src) {
   return new Promise(resolve => {
     const img = document.createElement('img')
     img.src = src
     img.onload = () => resolve(src)
   })
 }
+
+const imgSrcResourceCache = {}
 
 function Img({src, alt, ...props}) {
   let imgSrcResource = imgSrcResourceCache[src]
