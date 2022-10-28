@@ -6,22 +6,21 @@ import {
   fetchPokemon,
   PokemonInfoFallback,
   PokemonForm,
-  PokemonDataView,
   PokemonErrorBoundary,
   getImageUrlForPokemon,
 } from '../pokemon'
 import {createResource} from '../utils'
 
-function PokemonInfo({pokemonResource}) {
-  const pokemon = pokemonResource.data.read()
-  return (
-    <div>
-      <div className="pokemon-info__img-wrapper">
-        <img src={pokemon.image.reaad()} alt={pokemon.name} />
-      </div>
-      <PokemonDataView pokemon={pokemon} />
-    </div>
-  )
+const PokemonInfo = React.lazy(() =>
+  import('../lazy/pokemon-info-render-as-you-fetch'),
+)
+
+function preloadImage(src) {
+  return new Promise(resolve => {
+    const img = document.createElement('img')
+    img.src = src
+    img.onload = () => resolve(src)
+  })
 }
 
 const SUSPENSE_CONFIG = {
@@ -44,7 +43,7 @@ function getPokemonResource(name) {
 
 function createPokemonResource(pokemonName) {
   const data = createResource(fetchPokemon(pokemonName))
-  const image = createResource(getImageUrlForPokemon(pokemonName))
+  const image = createResource(preloadImage(getImageUrlForPokemon(pokemonName)))
   return {data, image}
 }
 
